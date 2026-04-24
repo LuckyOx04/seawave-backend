@@ -1,0 +1,7 @@
+﻿services:
+  seawaveapi:
+    image: seawaveapi
+    build:
+      context: .
+      dockerfile: SeawaveAPI/Dockerfile
+
