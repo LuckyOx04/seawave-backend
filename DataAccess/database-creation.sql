@@ -1,3 +1,153 @@
-CREATE DATABASE seawave;
-
+CREATE DATABASE IF NOT EXISTS seawave;
 USE seawave;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tracks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    artist VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    duration_seconds INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE playlists (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE playlists_tracks (
+    playlist_id INT NOT NULL,
+    track_id INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (playlist_id, track_id),
+    FOREIGN KEY (playlist_id) REFERENCES playlists(id) ON DELETE CASCADE,
+    FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE
+);
+
+CREATE TABLE upload_queue (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    artist VARCHAR(255) NOT NULL,
+    temp_file_path VARCHAR(500) NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE password_reset_tokens (
+    user_id INT PRIMARY KEY,
+    token_hash VARCHAR(255) NOT NULL,
+    expiry TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+DELIMITER //
+
+CREATE PROCEDURE sp_RegisterUser(IN p_username VARCHAR(50), IN p_email VARCHAR(255), IN p_password_hash VARCHAR(255))
+BEGIN 
+    INSERT INTO users (username, email, password_hash) VALUES (p_username, p_email, p_password_hash);
+END //
+
+CREATE PROCEDURE sp_GetUserByUsername(IN p_username VARCHAR(50))
+BEGIN 
+    SELECT id, username, email, password_hash FROM users WHERE username = p_username;
+END //
+
+CREATE PROCEDURE sp_SetPasswordResetToken(IN p_email VARCHAR(255), IN p_token_hash VARCHAR(255), IN p_expiry_minutes INT)
+BEGIN 
+    DECLARE v_user_id INT;
+    SELECT id INTO v_user_id FROM users WHERE email = p_email;
+    IF v_user_id IS NOT NULL THEN
+        INSERT INTO password_reset_tokens (user_id, token_hash, expiry)
+        VALUES (v_user_id, p_token_hash, DATE_ADD(NOW(), INTERVAL p_expiry_minutes MINUTE ))
+        ON DUPLICATE KEY UPDATE token_hash = p_token_hash, expiry = DATE_ADD(NOW(), INTERVAL p_expiry_minutes MINUTE);
+        SELECT 1 AS Success;
+    ELSE
+        SELECT 0 AS Success;
+    END IF;
+END //
+
+CREATE PROCEDURE sp_ResetPasswordWithToken(IN p_token_hash VARCHAR(255), IN p_new_password_hash VARCHAR(255))
+BEGIN 
+    DECLARE v_user_id INT;
+    SELECT user_id INTO v_user_id FROM password_reset_tokens WHERE token_hash = p_token_hash AND expiry > NOW();
+    IF v_user_id IS NOT NULL THEN
+        UPDATE users SET password_hash = p_new_password_hash WHERE id = v_user_id;
+        DELETE FROM password_reset_tokens WHERE user_id = v_user_id;
+        SELECT 1 AS Success;
+    ELSE
+        SELECT 0 AS Success;
+    END IF;
+END //
+
+CREATE PROCEDURE sp_ChangePassword(IN p_user_id INT, IN p_new_password_hash VARCHAR(255))
+BEGIN 
+    UPDATE users SET password_hash = p_new_password_hash WHERE id = p_user_id;
+    SELECT ROW_COUNT() AS Success;
+END //
+
+CREATE PROCEDURE sp_SearchTracks(IN p_query VARCHAR(255))
+BEGIN 
+    SELECT id, title, artist, duration_seconds FROM tracks
+    WHERE title LIKE CONCAT('%', p_query, '%') OR artist LIKE CONCAT('%', p_query, '%');
+END //
+
+CREATE PROCEDURE sp_SearchPlaylists(IN p_query VARCHAR(255))
+BEGIN 
+    SELECT playlists.id, playlists.name, users.username AS creator
+    FROM playlists
+    JOIN users ON playlists.user_id = users.id
+    WHERE playlists.name LIKE CONCAT('%', p_query, '%');
+END //
+
+CREATE PROCEDURE sp_CreatePlaylists(IN p_name VARCHAR(100), IN p_user_id INT)
+BEGIN 
+    INSERT INTO playlists (name, user_id) VALUES (p_name, p_user_id);
+    SELECT LAST_INSERT_ID() AS PlaylistId;
+END //
+
+CREATE PROCEDURE sp_DeletePlaylist(IN p_user_id INT, IN p_playlist_id INT)
+BEGIN 
+    DELETE FROM playlists WHERE id = p_playlist_id AND user_id = p_user_id;
+    SELECT ROW_COUNT() AS Success;
+END //
+
+CREATE PROCEDURE sp_AddTrackToPlaylist(IN p_playlist_id INT, IN p_track_id INT)
+BEGIN 
+    INSERT IGNORE INTO playlists_tracks (playlist_id, track_id) VALUES (p_playlist_id, p_track_id);
+END //
+
+CREATE PROCEDURE sp_RemoveTrackFromPlaylist(IN p_user_id INT, IN p_playlist_id INT, IN p_track_id INT)
+BEGIN 
+    DELETE pt FROM playlists_tracks pt
+    JOIN playlists p ON pt.playlist_id = p.id
+    WHERE pt.playlist_id = p_playlist_id AND pt.track_id = p_track_id AND p.user_id = p_user_id;
+    SELECT ROW_COUNT() AS Success;
+END //
+
+CREATE PROCEDURE sp_RequestUpload(In p_user_id INT, IN p_title VARCHAR(255), IN p_artist VARCHAR(255), IN p_temp_path VARCHAR(500))
+BEGIN 
+    INSERT INTO upload_queue (user_id, title, artist, temp_file_path)
+    VALUES (p_user_id, p_title, p_artist, p_temp_path);
+END //
+
+DELIMITER ;
+
+CREATE USER IF NOT EXISTS 'seawave_api_svc'@'localhost' IDENTIFIED BY 'WULNwGF25uTG';
+
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'seawave_api_svc'@'localhost';
+GRANT EXECUTE ON seawave.* TO 'seawave_api_svc'@'localhost';
+
+FLUSH PRIVILEGES;
