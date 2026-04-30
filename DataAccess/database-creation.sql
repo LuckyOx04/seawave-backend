@@ -53,6 +53,14 @@ CREATE TABLE password_reset_tokens (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE user_sessions (
+    session_token CHAR(36) PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 DELIMITER //
 
 CREATE PROCEDURE sp_RegisterUser(IN p_username VARCHAR(50), IN p_email VARCHAR(255), IN p_password_hash VARCHAR(255))
