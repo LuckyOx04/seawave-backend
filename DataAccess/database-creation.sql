@@ -163,6 +163,11 @@ BEGIN
     WHERE session_token = p_session_token AND expires_at > NOW();
 END //
 
+CREATE PROCEDURE sp_DeleteSession(IN p_session_token CHAR(36))
+BEGIN 
+    DELETE FROM user_sessions WHERE session_token = p_session_token;
+END //
+
 DELIMITER ;
 
 CREATE USER IF NOT EXISTS 'seawave_api_svc'@'localhost' IDENTIFIED BY 'WULNwGF25uTG';
