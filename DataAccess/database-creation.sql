@@ -151,6 +151,12 @@ BEGIN
     VALUES (p_user_id, p_title, p_artist, p_temp_path);
 END //
 
+CREATE PROCEDURE sp_CreateSession(IN p_session_token CHAR(36), IN p_user_id INT, IN p_expiry_days INT)
+BEGIN 
+    INSERT INTO user_sessions (session_token, user_id, expires_at)
+    VALUES (p_session_token, p_user_id, DATE_ADD(NOW(), INTERVAL p_expiry_days DAY));
+END //
+
 DELIMITER ;
 
 CREATE USER IF NOT EXISTS 'seawave_api_svc'@'localhost' IDENTIFIED BY 'WULNwGF25uTG';
