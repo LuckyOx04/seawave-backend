@@ -2,6 +2,8 @@
   <Folder Name="/Solution Items/">
     <File Path="compose.yaml" />
   </Folder>
+  <Project Path="Core/Core.csproj" />
   <Project Path="DataAccess/DataAccess.csproj" />
   <Project Path="SeawaveAPI/SeawaveAPI.csproj" />
+  <Project Path="Services/Services.csproj" />
 </Solution>
