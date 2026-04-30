@@ -6,7 +6,8 @@ CREATE TABLE users (
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_confirmed BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE tracks (
@@ -61,6 +62,13 @@ CREATE TABLE user_sessions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE email_verification_tokens (
+    user_id INT PRIMARY KEY,
+    token_hash CHAR(36) NOT NULL,
+    expiry TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 DELIMITER //
 
 CREATE PROCEDURE sp_RegisterUser(IN p_username VARCHAR(50), IN p_email VARCHAR(255), IN p_password_hash VARCHAR(255))
@@ -68,9 +76,10 @@ BEGIN
     INSERT INTO users (username, email, password_hash) VALUES (p_username, p_email, p_password_hash);
 END //
 
-CREATE PROCEDURE sp_GetUserByUsername(IN p_username VARCHAR(50))
+CREATE PROCEDURE sp_GetUserByLogin(IN p_identifier VARCHAR(255))
 BEGIN 
-    SELECT id, username, email, password_hash FROM users WHERE username = p_username;
+    SELECT id, username, email, password_hash, is_confirmed FROM users
+    WHERE username = p_identifier OR email = p_identifier;
 END //
 
 CREATE PROCEDURE sp_SetPasswordResetToken(IN p_email VARCHAR(255), IN p_token_hash VARCHAR(255), IN p_expiry_minutes INT)
@@ -166,6 +175,29 @@ END //
 CREATE PROCEDURE sp_DeleteSession(IN p_session_token CHAR(36))
 BEGIN 
     DELETE FROM user_sessions WHERE session_token = p_session_token;
+END //
+
+CREATE PROCEDURE sp_SetEmailVerificationToken(IN p_user_id INT, IN p_token_hash CHAR(36))
+BEGIN 
+    INSERT INTO email_verification_tokens (user_id, token_hash, expiry)
+    VALUES (p_user_id, p_token_hash, DATE_ADD(NOW(), INTERVAL 24 HOUR))
+    ON DUPLICATE KEY UPDATE token_hash = p_token_hash, expiry = DATE_ADD(NOW(), INTERVAL 24 HOUR);
+END //
+
+CREATE PROCEDURE sp_ConfirmEmail(IN p_token_hash CHAR(36))
+BEGIN 
+    DECLARE v_user_id INT;
+    
+    SELECT user_id INTO v_user_id FROM email_verification_tokens
+    WHERE token_hash = p_token_hash AND expiry > NOW();
+    
+    IF v_user_id IS NOT NULL THEN
+        UPDATE users SET is_confirmed = TRUE WHERE id = v_user_id;
+        DELETE FROM email_verification_tokens WHERE user_id = v_user_id;
+        SELECT 1 AS Success;
+    ELSE
+        SELECT 0 AS Success;
+    END IF;
 END //
 
 DELIMITER ;
