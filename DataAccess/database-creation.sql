@@ -129,7 +129,7 @@ BEGIN
     WHERE playlists.name LIKE CONCAT('%', p_query, '%');
 END //
 
-CREATE PROCEDURE sp_CreatePlaylists(IN p_name VARCHAR(100), IN p_user_id INT)
+CREATE PROCEDURE sp_CreatePlaylist(IN p_name VARCHAR(100), IN p_user_id INT)
 BEGIN 
     INSERT INTO playlists (name, user_id) VALUES (p_name, p_user_id);
     SELECT LAST_INSERT_ID() AS PlaylistId;
