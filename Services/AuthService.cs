@@ -11,11 +11,11 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
     {
         if (!Validator.IsValidEmail(request.Email))
         {
-            throw new Exception("Invalid email format.");
+            throw new FormatException("Invalid email format.");
         }
         if (!Validator.IsValidPassword(request.Password))
         {
-            throw new Exception("Password must have at least 8 characters," +
+            throw new FormatException("Password must have at least 8 characters," +
                                 "an upper case letter, a lower case letter and a digit.");
         }
 

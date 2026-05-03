@@ -51,7 +51,7 @@ public class MusicService
     {
         if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(artist))
         {
-            throw new Exception("Title and Artist are required for uploads.");
+            throw new FormatException("Title and Artist are required for uploads.");
         }
         
         var storageName = $"{Guid.NewGuid()}_{fileName}";

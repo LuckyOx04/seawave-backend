@@ -1,4 +1,5 @@
 using DataAccess.Repositories;
+using Org.BouncyCastle.Security;
 using Services.Helpers;
 using BC = BCrypt.Net.BCrypt;
 
@@ -22,7 +23,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
     {
         if (!Validator.IsValidPassword(newPassword))
         {
-            throw new Exception("Password must have at least 8 characters," +
+            throw new FormatException("Password must have at least 8 characters," +
                                 "an upper case letter, a lower case letter and a digit.");
         }
 
@@ -34,11 +35,11 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
     {
         if (newPass != confirmPass)
         {
-            throw new Exception("Confirmed password does not match the new password.");
+            throw new FormatException("Confirmed password does not match the new password.");
         }
         if (!Validator.IsValidPassword(newPass))
         {
-            throw new Exception("Password must have at least 8 characters," +
+            throw new FormatException("Password must have at least 8 characters," +
                                 "an upper case letter, a lower case letter and a digit.");
         }
 
@@ -50,7 +51,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
 
         if (!BC.Verify(currentPass, user.PasswordHash))
         {
-            throw new Exception("Wrong current password.");
+            throw new PasswordException("Wrong current password.");
         }
 
         var newHash = BC.HashPassword(newPass);
