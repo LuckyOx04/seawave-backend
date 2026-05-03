@@ -6,7 +6,7 @@ namespace SeawaveAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(AuthService authService, PasswordService passwordService) : ControllerBase
+public class AuthController(AuthService authService) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegistrationRequest req) => Ok(await authService.RegisterAsync(req));
