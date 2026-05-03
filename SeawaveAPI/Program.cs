@@ -1,5 +1,6 @@
 using DataAccess;
 using DataAccess.Repositories;
+using SeawaveAPI.Middlewares;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
