@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SeawaveAPI.Attributes;
 using Services;
 
 namespace SeawaveAPI.Controllers;
@@ -21,6 +22,7 @@ public class MusicController(MusicService musicService) : ControllerBase
     }
 
     [HttpPost("upload")]
+    [SessionAuthorize]
     public async Task<IActionResult> UploadTrack(int userId, string title, string artist, IFormFile file)
     {
         using var stream = file.OpenReadStream();
