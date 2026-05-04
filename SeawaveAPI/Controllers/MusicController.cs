@@ -9,10 +9,10 @@ namespace SeawaveAPI.Controllers;
 public class MusicController(MusicService musicService) : ControllerBase
 {
     [HttpGet("search/tracks")]
-    public async Task<IActionResult> SearchTracks(string query) => Ok(await musicService.SearchTrackAsync(query));
+    public async Task<IActionResult> SearchTracks(string q) => Ok(await musicService.SearchTrackAsync(q));
     
     [HttpGet("search/playlists")]
-    public async Task<IActionResult> SearchPlaylists(string query) => Ok(await musicService.SearchPlaylistAsync(query));
+    public async Task<IActionResult> SearchPlaylists(string q) => Ok(await musicService.SearchPlaylistAsync(q));
 
     [HttpGet("stream/{fileName}")]
     public async Task<IActionResult> StreamTrack(string fileName)
