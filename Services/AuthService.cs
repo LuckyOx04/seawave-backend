@@ -53,7 +53,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
         var token = Guid.NewGuid().ToString();
         await sessionRepository.CreateSessionAsync(token, user.Id, 7);
 
-        return new LoginResponse(true, "Success", token);
+        return new LoginResponse(token);
     }
 
     public async Task<int?> ValidateSessionAsync(string token)
