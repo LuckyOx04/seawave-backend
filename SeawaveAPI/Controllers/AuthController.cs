@@ -17,7 +17,20 @@ public class AuthController(AuthService authService) : ControllerBase
     public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
     {
         var success = await authService.ConfirmEmailAsync(token);
-        return success ? Ok() : BadRequest();
+        var title = success ? "Email confirmed" : "Link Expired";
+        var message = success ? "Your email has been confirmed. You can now log in to the desktop app." 
+            : "This confirmation link is invalid or has already been used.";
+        var color = success ? "#4CAF50" : "#F44336";
+        return Content($@"
+            <html>
+                <body style='font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f9f9f9;'>
+                    <div style='text-align: center; padding: 50px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);'>
+                        <h1 style='color: {color};'>{title}</h1>
+                        <p style='color: #555; font-size: 1.1em;'>{message}</p>
+                        <p style='margin-top: 20px; color: #888;'>You may close this window.</p>
+                    </div>
+                </body>
+            </html>", "text/html");
     }
 
     [HttpPost("login")]
