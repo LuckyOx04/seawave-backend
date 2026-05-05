@@ -28,10 +28,12 @@ public class MusicService
 
     public async Task<bool> DeletePlaylistAsync(int userId, int playlistId) =>
         await _musicRepository.DeletePlaylistAsync(userId, playlistId) > 0;
-    
-    public async Task AddTrackToPlaylistAsync(int playlistId, int trackId) =>
-        await _musicRepository.AddTrackToPlaylistAsync(playlistId, trackId);
-    
+
+    public async Task<bool> AddTrackToPlaylistAsync(int userId, int playlistId, int trackId)
+    {
+        return await _musicRepository.AddTrackToPlaylistAsync(userId, playlistId, trackId);
+    }
+
     public async Task<bool> RemoveTrackFromPlaylistAsync(int userId, int playlistId, int trackId) =>
         await _musicRepository.RemoveTrackFromPlaylistAsync(userId, playlistId, trackId) > 0;
 

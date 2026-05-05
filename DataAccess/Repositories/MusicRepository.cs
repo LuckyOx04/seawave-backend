@@ -22,12 +22,12 @@ public class MusicRepository(IDbConnectionFactory db)
             commandType: CommandType.StoredProcedure);
     }
     
-    public async Task AddTrackToPlaylistAsync(int playlistId, int trackId)
+    public async Task<bool> AddTrackToPlaylistAsync(int userId, int playlistId, int trackId)
     {
         using var connection = db.CreateConnection();
-        await connection.ExecuteAsync("sp_AddTrackToPlaylist",
-            new { p_playlist_id = playlistId, p_track_id = trackId },
-            commandType: CommandType.StoredProcedure);
+        return await connection.ExecuteScalarAsync<int>("sp_AddTrackToPlaylist",
+            new { p_user_id = userId, p_playlist_id = playlistId, p_track_id = trackId },
+            commandType: CommandType.StoredProcedure) == 1;
     }
 
     public async Task<int> RemoveTrackFromPlaylistAsync(int userId, int playlistId, int trackId)
