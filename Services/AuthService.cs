@@ -42,17 +42,19 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
         await userRepository.SetEmailVerificationTokenAsync(userId, token);
 
         await emailService.SendEmailAsync(request.Email, "Confirm your account", 
-            $@"<div style='font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee;'>
-                        <h2 style='color: #2D3E50;'>Welcome to Seawave!</h2>
-                        <p>Please click the button below to verify your email address and activate your account.</p>
-                        <div style='text-align: center; margin: 30px 0;'>
-                            <a href='https://localhost:7212/api/auth/confirm-email?token={token}'
-                                style='background-color: #4CAF50; color: white; padding: 14px 25px; text-decoration: none; border-radius: 5px; display: inline-block;'>
-                                Verify Email Address
-                            </a>
-                        </div>
-                        <p style='font-size: 0.8em; color: #666;'>If you didn't create an account, you can safely ignore this email.</p>
-                    </div>");
+            $"""
+                <div style='font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee;'>
+                    <h2 style='color: #2D3E50;'>Welcome to Seawave!</h2>
+                    <p>Please click the button below to verify your email address and activate your account.</p>
+                    <div style='text-align: center; margin: 30px 0;'>
+                        <a href='https://localhost:7212/api/auth/confirm-email?token={token}'
+                            style='background-color: #4CAF50; color: white; padding: 14px 25px; text-decoration: none; border-radius: 5px; display: inline-block;'>
+                            Verify Email Address
+                        </a>
+                    </div>
+                    <p style='font-size: 0.8em; color: #666;'>If you didn't create an account, you can safely ignore this email.</p>
+                </div>
+                """);
 
         return "Registration successful. Please, check your email.";
     }
