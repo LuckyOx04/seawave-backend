@@ -1,5 +1,6 @@
 using Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using SeawaveAPI.Attributes;
 using Services;
 
 namespace SeawaveAPI.Controllers;
@@ -9,16 +10,18 @@ namespace SeawaveAPI.Controllers;
 public class AuthController(AuthService authService) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegistrationRequest req) => Ok(await authService.RegisterAsync(req));
+    public async Task<IActionResult> Register([FromBody] RegistrationRequest req) 
+        => Ok(await authService.RegisterAsync(req));
     
     [HttpGet("confirm-email")]
-    public async Task<IActionResult> ConfirmEmail([FromQuery] string token) =>
-        Ok(await authService.ConfirmEmailAsync(token));
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string token) 
+        => Ok(await authService.ConfirmEmailAsync(token));
     
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest req) => Ok(await authService.LoginAsync(req));
 
     [HttpPost("logout")]
+    [SessionAuthorize]
     public async Task<IActionResult> Logout([FromHeader(Name = "Authorization")] string token)
     {
         await authService.LogoutAsync(token);
