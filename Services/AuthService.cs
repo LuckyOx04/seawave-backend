@@ -19,15 +19,31 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
                                 "an upper case letter, a lower case letter and a digit.");
         }
 
+        if (string.IsNullOrWhiteSpace(request.Username))
+        {
+            throw new FormatException("Username cannot be empty.");
+        }
+
+        string slug = request.Username.Slugify();
+
+        if (userRepository.GetByLoginAsync(slug).Result != null)
+        {
+            throw new UnauthorizedAccessException("Username already taken.");
+        }
+        if (userRepository.GetByLoginAsync(request.Email).Result != null)
+        {
+            throw new UnauthorizedAccessException("Email already taken.");
+        }
+
         var hash = BC.HashPassword(request.Password);
-        await userRepository.RegisterAsync(request.Username, request.Email, hash);
-
-        var user = await userRepository.GetByLoginAsync(request.Email);
+        var userId = await userRepository.RegisterAsync(slug, request.Email, hash);
+        
         var token = Guid.NewGuid().ToString();
-        await userRepository.SetEmailVerificationTokenAsync(user!.Id, token);
+        await userRepository.SetEmailVerificationTokenAsync(userId, token);
 
-        await emailService.SendEmailAsync(user.Email, "Confirm your account",
-            $"<h1>Welcome!</h1><p>Use this token to verify: <b>{token}</b></p>");
+        await emailService.SendEmailAsync(request.Email, "Confirm your account",
+            $"<h1>Welcome!</h1><p>Click <a href=https://localhost/api/auth/confirm-email?token={token}>" +
+            $"<b>here</b></a> to confirm your email.</p>");
 
         return "Please, check your email.";
     }

@@ -74,6 +74,7 @@ DELIMITER //
 CREATE PROCEDURE sp_RegisterUser(IN p_username VARCHAR(50), IN p_email VARCHAR(255), IN p_password_hash VARCHAR(255))
 BEGIN 
     INSERT INTO users (username, email, password_hash) VALUES (p_username, p_email, p_password_hash);
+    SELECT LAST_INSERT_ID() AS UserId;
 END //
 
 CREATE PROCEDURE sp_GetUserByLogin(IN p_identifier VARCHAR(255))

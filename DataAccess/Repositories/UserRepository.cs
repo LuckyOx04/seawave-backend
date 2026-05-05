@@ -6,10 +6,10 @@ namespace DataAccess.Repositories;
 
 public class UserRepository(IDbConnectionFactory db)
 {
-    public async Task RegisterAsync(string username, string email, string passwordHash)
+    public async Task<int> RegisterAsync(string username, string email, string passwordHash)
     {
         using var connection = db.CreateConnection();
-        await connection.ExecuteAsync("sp_RegisterUser",
+        return await connection.ExecuteScalarAsync<int>("sp_RegisterUser",
             new { p_username = username, p_email = email, p_passwordHash = passwordHash },
             commandType: CommandType.StoredProcedure);
     }
