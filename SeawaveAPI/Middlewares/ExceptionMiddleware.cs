@@ -22,10 +22,6 @@ public class ExceptionMiddleware(RequestDelegate next)
         {
             await WriteError(context, 404, ex.Message);
         }
-        catch (PasswordException ex)
-        {
-            await WriteError(context, 400, ex.Message);
-        }
         catch (Exception ex)
         {
             await WriteError(context, 500, ex.Message);

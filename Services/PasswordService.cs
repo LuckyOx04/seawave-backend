@@ -51,7 +51,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
 
         if (!BC.Verify(currentPass, user.PasswordHash))
         {
-            throw new PasswordException("Wrong current password.");
+            throw new UnauthorizedAccessException("Wrong current password.");
         }
 
         var newHash = BC.HashPassword(newPass);
