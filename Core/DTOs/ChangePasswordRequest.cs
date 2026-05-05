@@ -1,3 +1,3 @@
 namespace Core.DTOs;
 
-public record ChangePasswordRequest(string OldPassword, string NewPassword);
+public record ChangePasswordRequest(string CurrentPassword, string NewPassword, string ConfirmPassword);
