@@ -19,7 +19,8 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
     [HttpPost("reset")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
     {
-        var success = await passwordService.ResetPasswordAsync(request.Token, request.NewPassword);
+        var success = await passwordService.ResetPasswordAsync(request.Token, request.NewPassword, 
+            request.ConfirmPassword);
         return success ? Ok() : Forbid();
     }
 
