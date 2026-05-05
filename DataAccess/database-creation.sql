@@ -77,6 +77,12 @@ BEGIN
     SELECT LAST_INSERT_ID() AS UserId;
 END //
 
+CREATE PROCEDURE sp_GetUserById(IN p_userId INT)
+BEGIN 
+    SELECT id, username, email, password_hash, is_confirmed FROM users
+    WHERE id = p_userId;
+END //
+
 CREATE PROCEDURE sp_GetUserByLogin(IN p_identifier VARCHAR(255))
 BEGIN 
     SELECT id, username, email, password_hash, is_confirmed FROM users

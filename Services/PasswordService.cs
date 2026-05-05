@@ -31,7 +31,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
         return await userRepository.ResetPasswordWithTokenAsync(token, hash);
     }
 
-    public async Task<bool> ChangePasswordAsync(string identifier, string currentPass, string newPass, string confirmPass)
+    public async Task<bool> ChangePasswordAsync(int userId, string currentPass, string newPass, string confirmPass)
     {
         if (newPass != confirmPass)
         {
@@ -43,10 +43,10 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
                                 "an upper case letter, a lower case letter and a digit.");
         }
 
-        var user = await userRepository.GetByLoginAsync(identifier);
+        var user = await userRepository.GetByIdAsync(userId);
         if (user == null)
         {
-            return false;
+            throw new FileNotFoundException("User not found.");
         }
 
         if (!BC.Verify(currentPass, user.PasswordHash))

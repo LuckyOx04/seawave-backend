@@ -14,6 +14,14 @@ public class UserRepository(IDbConnectionFactory db)
             commandType: CommandType.StoredProcedure);
     }
 
+    public async Task<User?> GetByIdAsync(int id)
+    {
+        using var connection = db.CreateConnection();
+        return await connection.QueryFirstOrDefaultAsync<User>("sp_GetUserById",
+            new { p_user_id = id },
+            commandType: CommandType.StoredProcedure);
+    }
+
     public async Task<User?> GetByLoginAsync(string identifier)
     {
         using var connection = db.CreateConnection();
