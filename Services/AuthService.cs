@@ -39,21 +39,21 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
-        var user = await userRepository.GetByLoginAsync(request.LoginIdentifier);
+        var user = await userRepository.GetByLoginAsync(request.Identifier);
 
         if (user == null || !BC.Verify(request.Password, user.PasswordHash))
         {
-            return new LoginResponse(false, "Invalid credentials", null, null);
+            throw new UnauthorizedAccessException("Invalid credentials.");
         }
         if (!user.IsConfirmed)
         {
-            return new LoginResponse(false, "Email not confirmed", null, user.Username, false);
+            throw new UnauthorizedAccessException("Email not confirmed.");
         }
 
         var token = Guid.NewGuid().ToString();
         await sessionRepository.CreateSessionAsync(token, user.Id, 7);
 
-        return new LoginResponse(true, "Success", token, user.Username);
+        return new LoginResponse(true, "Success", token);
     }
 
     public async Task<int?> ValidateSessionAsync(string token)

@@ -1,3 +1,3 @@
 namespace Core.DTOs;
 
-public record LoginRequest(string LoginIdentifier, string Password);
+public record LoginRequest(string Identifier, string Password);
