@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.Repositories;
 using SeawaveAPI.Middlewares;
 using Services;
+using Services.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException($"Connection string not found.");
 
 builder.Services.AddSingleton<IDbConnectionFactory>(_ => new MySqlDbConnectionFactory(connectionString));
+builder.Services.Configure<SmtpAddressOptions>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<SmtpAuthOptions>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<SessionRepository>();
 builder.Services.AddScoped<MusicRepository>();

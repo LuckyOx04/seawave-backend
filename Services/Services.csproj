@@ -25,6 +25,9 @@
       <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
         <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\9.0.15\ref\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
       </Reference>
+      <Reference Include="Microsoft.Extensions.Options">
+        <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\9.0.15\ref\net9.0\Microsoft.Extensions.Options.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

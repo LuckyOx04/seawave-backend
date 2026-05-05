@@ -1,5 +1,4 @@
 using DataAccess.Repositories;
-using Org.BouncyCastle.Security;
 using Services.Helpers;
 using BC = BCrypt.Net.BCrypt;
 
@@ -10,7 +9,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
     public async Task RequestPasswordResetAsync(string email)
     {
         var token = Guid.NewGuid().ToString();
-        bool exists = await userRepository.SetPasswordResetTokenAsync(email, token, 30);
+        var exists = await userRepository.SetPasswordResetTokenAsync(email, token, 30);
 
         if (exists)
         {

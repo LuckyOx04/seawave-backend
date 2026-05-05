@@ -6,11 +6,11 @@ public class SessionMiddleware(RequestDelegate next)
 {
     public async Task InvokeAsync(HttpContext context, AuthService authService)
     {
-        string? token = context.Request.Headers["Authorization"];
+        string? token = context.Request.Headers.Authorization;
 
         if (!string.IsNullOrEmpty(token))
         {
-            int? userId = await authService.ValidateSessionAsync(token);
+            var userId = await authService.ValidateSessionAsync(token);
 
             if (userId.HasValue)
             {

@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace Services.Helpers;
 
-public static class StringHelper
+public static partial class StringHelper
 {
     public static string Slugify(this string phrase)
     {
@@ -11,12 +11,17 @@ public static class StringHelper
             return string.Empty;
         }
 
-        string str = phrase.ToLower();
+        var str = phrase.ToLower();
 
-        str = Regex.Replace(str, @"[^a-z0-9\s-]", "");
+        str = NotAllowedCharactersRegex().Replace(str, "");
         
-        str = Regex.Replace(str, @"[\s-]+", "-").Trim();
+        str = WhiteSpaceOrHyphenRegex().Replace(str, "-").Trim();
         
         return str;
     }
+
+    [GeneratedRegex(@"[^a-z0-9\s-]")]
+    private static partial Regex NotAllowedCharactersRegex();
+    [GeneratedRegex(@"[\s-]+")]
+    private static partial Regex WhiteSpaceOrHyphenRegex();
 }

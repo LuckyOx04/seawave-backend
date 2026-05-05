@@ -24,7 +24,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
             throw new FormatException("Username cannot be empty.");
         }
 
-        string slug = request.Username.Slugify();
+        var slug = request.Username.Slugify();
 
         if (userRepository.GetByLoginAsync(slug).Result != null)
         {
@@ -53,7 +53,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
         return await userRepository.ConfirmEmailAsync(token);
     }
 
-    public async Task<LoginResponse> LoginAsync(LoginRequest request)
+    public async Task<string> LoginAsync(LoginRequest request)
     {
         var user = await userRepository.GetByLoginAsync(request.Identifier);
 
@@ -69,7 +69,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
         var token = Guid.NewGuid().ToString();
         await sessionRepository.CreateSessionAsync(token, user.Id, 7);
 
-        return new LoginResponse(token);
+        return token;
     }
 
     public async Task<int?> ValidateSessionAsync(string token)

@@ -16,21 +16,21 @@ public class PlaylistController(MusicService musicService) : ControllerBase
     public async Task<IActionResult> CreatePlaylist([FromBody] CreatePlaylistRequest request) 
         => Ok(await musicService.CreatePlaylistAsync(request.Name, CurrentUserId));
 
-    [HttpDelete("{playlistId}")]
+    [HttpDelete("{playlistId:int}")]
     public async Task<IActionResult> DeletePlaylist([FromRoute] int playlistId)
     {
         var success = await musicService.DeletePlaylistAsync(CurrentUserId, playlistId);
         return success ? NoContent() : Forbid();
     }
 
-    [HttpPost("{playlistId}/tracks/{trackId}")]
+    [HttpPost("{playlistId:int}/tracks/{trackId:int}")]
     public async Task<IActionResult> AddTrack([FromRoute] int playlistId, [FromRoute] int trackId)
     {
         var success = await musicService.AddTrackToPlaylistAsync(CurrentUserId, playlistId, trackId);
         return success ? Created() : Forbid();
     }
 
-    [HttpDelete("{playlistId}/tracks/{trackId}")]
+    [HttpDelete("{playlistId:int}/tracks/{trackId:int}")]
     public async Task<IActionResult> RemoveTrack([FromRoute] int playlistId, [FromRoute] int trackId)
     {
         var success = await musicService.RemoveTrackFromPlaylistAsync(CurrentUserId, playlistId, trackId);
