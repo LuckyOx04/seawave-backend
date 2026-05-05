@@ -1,3 +1,5 @@
+using Org.BouncyCastle.Security;
+
 namespace SeawaveAPI.Middlewares;
 
 public class ExceptionMiddleware(RequestDelegate next)
@@ -19,6 +21,10 @@ public class ExceptionMiddleware(RequestDelegate next)
         catch (FileNotFoundException ex)
         {
             await WriteError(context, 404, ex.Message);
+        }
+        catch (PasswordException ex)
+        {
+            await WriteError(context, 400, ex.Message);
         }
         catch (Exception ex)
         {
