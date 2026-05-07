@@ -1,7 +1,16 @@
 ﻿services:
-  seawaveapi:
-    image: seawaveapi
+  seawave-api:
+    image: seawave-api
     build:
       context: .
       dockerfile: SeawaveAPI/Dockerfile
-
+    ports:
+      - "8080:80"
+      - "8081:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro

@@ -1,6 +1,6 @@
-@SeawaveAPI_HostAddress = http://localhost:5163
+@SeawaveAPI_HostAddress = https://localhost:7212
 
-GET {{SeawaveAPI_HostAddress}}/weatherforecast/
+GET {{SeawaveAPI_HostAddress}}/openapi/v1.json
 Accept: application/json
 
 ###

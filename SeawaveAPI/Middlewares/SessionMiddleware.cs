@@ -16,8 +16,7 @@ public class SessionMiddleware(RequestDelegate next)
             {
                 context.Items["UserId"] = userId.Value;
             }
-
-            await next(context);
         }
+        await next(context);
     }
 }

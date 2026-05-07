@@ -1,5 +1,6 @@
 using DataAccess;
 using DataAccess.Repositories;
+using Scalar.AspNetCore;
 using SeawaveAPI.Middlewares;
 using Services;
 using Services.Helpers;
@@ -32,6 +33,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+else
+{
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();

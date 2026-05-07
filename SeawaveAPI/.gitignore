@@ -468,7 +468,7 @@ FodyWeavers.xsd
 .history/
 
 # Windows Installer files from build outputs
-*.cab
+*.cab=
 *.msi
 *.msix
 *.msm
@@ -476,4 +476,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#Docker compose .env file
+.env
 
