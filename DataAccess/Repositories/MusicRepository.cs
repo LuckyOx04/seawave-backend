@@ -84,11 +84,11 @@ public class MusicRepository(IDbConnectionFactory db)
             tracks.ToList());
     }
 
-    public async Task RequestUploadAsync(int userId, string title, string artist, string tempPath)
+    public async Task RequestUploadAsync(int userId, string title, string artist, string tempFileName)
     {
         using var connection = db.CreateConnection();
         await connection.ExecuteAsync("sp_RequestUpload",
-            new { p_user_id = userId, p_title = title, p_artist = artist, p_temp_path = tempPath },
+            new { p_user_id = userId, p_title = title, p_artist = artist, p_temp_file_name = tempFileName },
             commandType: CommandType.StoredProcedure);
     }
 }
