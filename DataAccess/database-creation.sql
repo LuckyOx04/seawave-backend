@@ -79,13 +79,13 @@ END //
 
 CREATE PROCEDURE sp_GetUserById(IN p_userId INT)
 BEGIN 
-    SELECT id, username, email, password_hash, is_confirmed FROM users
+    SELECT id AS Id, username AS Username, email AS Email, password_hash AS PasswordHash, is_confirmed AS IsConfirmed FROM users
     WHERE id = p_userId;
 END //
 
 CREATE PROCEDURE sp_GetUserByLogin(IN p_identifier VARCHAR(255))
-BEGIN 
-    SELECT id, username, email, password_hash, is_confirmed FROM users
+BEGIN
+    SELECT id AS Id, username AS Username, email AS Email, password_hash AS PasswordHash, is_confirmed AS IsConfirmed FROM users
     WHERE username = p_identifier OR email = p_identifier;
 END //
 
@@ -124,16 +124,31 @@ END //
 
 CREATE PROCEDURE sp_SearchTracks(IN p_query VARCHAR(255))
 BEGIN 
-    SELECT id, title, artist, duration_seconds FROM tracks
+    SELECT id AS Id, title AS Title, artist AS Artist, file_name AS FileName, duration_seconds AS DurationSeconds FROM tracks
     WHERE title LIKE CONCAT('%', p_query, '%') OR artist LIKE CONCAT('%', p_query, '%');
 END //
 
 CREATE PROCEDURE sp_SearchPlaylists(IN p_query VARCHAR(255))
 BEGIN 
-    SELECT playlists.id, playlists.name, users.username AS creator
+    SELECT playlists.id AS Id, playlists.name AS Name, playlists.user_id AS CreatorId, users.username AS CreatorName,
+    (SELECT COUNT(*) FROM playlists_tracks pt WHERE pt.playlist_id = playlists.id) AS TrackCount
     FROM playlists
     JOIN users ON playlists.user_id = users.id
     WHERE playlists.name LIKE CONCAT('%', p_query, '%');
+END //
+
+CREATE PROCEDURE sp_GetPlaylistById(IN p_playlist_id INT)
+BEGIN
+    SELECT playlists.id AS Id, playlists.name AS Name, playlists.user_id AS CreatorId, users.username AS CreatorName
+    FROM playlists JOIN users ON playlists.user_id = users.id
+    WHERE playlists.id = p_playlist_id;
+END //
+
+CREATE PROCEDURE sp_GetPlaylistTracks(IN p_playlist_id INT)
+BEGIN 
+    SELECT id AS Id, title AS Title, artist AS Artist, file_name AS FileName, duration_seconds AS DurationSeconds FROM tracks
+    JOIN playlists_tracks ON tracks.id = playlists_tracks.track_id
+    WHERE playlists_tracks.playlist_id = p_playlist_id;
 END //
 
 CREATE PROCEDURE sp_CreatePlaylist(IN p_name VARCHAR(100), IN p_user_id INT)
@@ -182,7 +197,7 @@ END //
 
 CREATE PROCEDURE sp_ValidateSession(IN p_session_token CHAR(36))
 BEGIN 
-    SELECT user_id FROM user_sessions
+    SELECT user_id AS UserId FROM user_sessions
     WHERE session_token = p_session_token AND expires_at > NOW();
 END //
 
@@ -218,6 +233,7 @@ DELIMITER ;
 
 CREATE USER IF NOT EXISTS '{DATABASE_USER}'@'localhost' IDENTIFIED BY '{DATABASE_PASSWORD}';
 
+GRANT EXECUTE ON seawave.* TO '{DATABASE_USER}'@'localhost';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{DATABASE_USER}'@'localhost';
 GRANT EXECUTE ON seawave.* TO '{DATABASE_USER}'@'localhost';
 

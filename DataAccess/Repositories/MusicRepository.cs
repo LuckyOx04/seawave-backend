@@ -46,12 +46,42 @@ public class MusicRepository(IDbConnectionFactory db)
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<IEnumerable<Playlist>> SearchPlaylistsAsync(string query)
+    public async Task<IEnumerable<PlaylistSummary>> SearchPlaylistsAsync(string query)
     {
         using var connection = db.CreateConnection();
-        return await connection.QueryAsync<Playlist>("sp_SearchPlaylists",
+        return await connection.QueryAsync<PlaylistSummary>("sp_SearchPlaylists",
             new { p_query = query },
             commandType: CommandType.StoredProcedure);
+    }
+
+    private async Task<PlaylistSummary?> GetPlaylistByIdAsync(int playlistId)
+    {
+        using var connection = db.CreateConnection();
+        return await connection.QuerySingleOrDefaultAsync<PlaylistSummary>("sp_GetPlaylistById",
+            new { p_playlist_id = playlistId },
+            commandType: CommandType.StoredProcedure);
+    }
+    
+    public async Task<PlaylistDetails?> GetPlaylistDetailsAsync(int playlistId)
+    {
+        var playlistSummary = await GetPlaylistByIdAsync(playlistId);
+
+        if (playlistSummary == null)
+        {
+            return null;
+        }
+        
+        using var connection = db.CreateConnection();
+        var tracks = await connection.QueryAsync<Track>("sp_GetPlaylistTracks",
+            new { p_playlist_id = playlistId },
+            commandType: CommandType.StoredProcedure);
+
+        return new PlaylistDetails(
+            playlistSummary.Id,
+            playlistSummary.Name,
+            playlistSummary.CreatorId,
+            playlistSummary.CreatorName,
+            tracks.ToList());
     }
 
     public async Task RequestUploadAsync(int userId, string title, string artist, string tempPath)

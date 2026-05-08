@@ -17,25 +17,29 @@ public class MusicService
         Directory.CreateDirectory(Path.Combine(_basePath, "Pending"));
     }
     
-    public async Task<IEnumerable<Track>> SearchTrackAsync(string query) => 
-        await _musicRepository.SearchTracksAsync(query);
+    public async Task<IEnumerable<Track>> SearchTrackAsync(string query) 
+        => await _musicRepository.SearchTracksAsync(query);
     
-    public async Task<IEnumerable<Playlist>> SearchPlaylistAsync(string query) =>
-        await _musicRepository.SearchPlaylistsAsync(query);
-    
-    public async Task<int> CreatePlaylistAsync(string name, int userId) => 
-        await _musicRepository.CreatePlaylistAsync(name, userId);
+    public async Task<IEnumerable<PlaylistSummary>> SearchPlaylistAsync(string query) 
+        => await _musicRepository.SearchPlaylistsAsync(query);
 
-    public async Task<bool> DeletePlaylistAsync(int userId, int playlistId) =>
-        await _musicRepository.DeletePlaylistAsync(userId, playlistId) > 0;
+    public async Task<PlaylistDetails?> GetPlaylistDetailsAsync(int playlistId)
+        => await _musicRepository.GetPlaylistDetailsAsync(playlistId);
+
+
+    public async Task<int> CreatePlaylistAsync(string name, int userId) 
+        => await _musicRepository.CreatePlaylistAsync(name, userId);
+
+    public async Task<bool> DeletePlaylistAsync(int userId, int playlistId) 
+        => await _musicRepository.DeletePlaylistAsync(userId, playlistId) > 0;
 
     public async Task<bool> AddTrackToPlaylistAsync(int userId, int playlistId, int trackId)
     {
         return await _musicRepository.AddTrackToPlaylistAsync(userId, playlistId, trackId);
     }
 
-    public async Task<bool> RemoveTrackFromPlaylistAsync(int userId, int playlistId, int trackId) =>
-        await _musicRepository.RemoveTrackFromPlaylistAsync(userId, playlistId, trackId) > 0;
+    public async Task<bool> RemoveTrackFromPlaylistAsync(int userId, int playlistId, int trackId) 
+        => await _musicRepository.RemoveTrackFromPlaylistAsync(userId, playlistId, trackId) > 0;
 
     public Task<FileStream> GetTrackStreamAsync(string fileName)
     {

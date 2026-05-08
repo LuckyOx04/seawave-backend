@@ -16,6 +16,13 @@ public class MusicController(MusicService musicService) : ControllerBase
     public async Task<IActionResult> SearchPlaylists([FromQuery] string q) 
         => Ok(await musicService.SearchPlaylistAsync(q));
 
+    [HttpGet("playlist/{playlistId:int}")]
+    public async Task<IActionResult> GetPlaylistDetails([FromRoute] int playlistId)
+    {
+        var playlistDetails = await musicService.GetPlaylistDetailsAsync(playlistId);
+        return playlistDetails != null ? Ok(playlistDetails) : NotFound();
+    }
+
     [HttpGet("stream/{fileName}")]
     public async Task<IActionResult> StreamTrack([FromRoute] string fileName)
     {
