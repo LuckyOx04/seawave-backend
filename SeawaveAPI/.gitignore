@@ -480,3 +480,8 @@ FodyWeavers.xsd
 #Docker compose .env file
 .env
 
+#Music files
+MusicStorage/**/*
+.mp3
+.aac
+.flac

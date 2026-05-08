@@ -12,11 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="MusicStorage\Library\" />
-      <Folder Include="MusicStorage\Pending\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
       <PackageReference Include="MailKit" Version="4.16.0" />
     </ItemGroup>
