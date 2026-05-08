@@ -6,31 +6,31 @@ CREATE TABLE users (
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_confirmed BOOLEAN DEFAULT FALSE
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    is_confirmed BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE tracks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     artist VARCHAR(255) NOT NULL,
-    file_path VARCHAR(255) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
     duration_seconds INT NOT NULL,
-    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE playlists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     user_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE playlists_tracks (
     playlist_id INT NOT NULL,
     track_id INT NOT NULL,
-    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     PRIMARY KEY (playlist_id, track_id),
     FOREIGN KEY (playlist_id) REFERENCES playlists(id) ON DELETE CASCADE,
     FOREIGN KEY (track_id) REFERENCES tracks(id) ON DELETE CASCADE
@@ -41,9 +41,9 @@ CREATE TABLE upload_queue (
     user_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     artist VARCHAR(255) NOT NULL,
-    temp_file_path VARCHAR(500) NOT NULL,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    file_name VARCHAR(500) NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending' NOT NULL,
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE password_reset_tokens (
 CREATE TABLE user_sessions (
     session_token CHAR(36) PRIMARY KEY,
     user_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     expires_at TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -168,10 +168,10 @@ BEGIN
     SELECT ROW_COUNT() AS Success;
 END //
 
-CREATE PROCEDURE sp_RequestUpload(In p_user_id INT, IN p_title VARCHAR(255), IN p_artist VARCHAR(255), IN p_temp_path VARCHAR(500))
+CREATE PROCEDURE sp_RequestUpload(In p_user_id INT, IN p_title VARCHAR(255), IN p_artist VARCHAR(255), IN p_temp_file_name VARCHAR(500))
 BEGIN 
-    INSERT INTO upload_queue (user_id, title, artist, temp_file_path)
-    VALUES (p_user_id, p_title, p_artist, p_temp_path);
+    INSERT INTO upload_queue (user_id, title, artist, file_name)
+    VALUES (p_user_id, p_title, p_artist, p_temp_file_name);
 END //
 
 CREATE PROCEDURE sp_CreateSession(IN p_session_token CHAR(36), IN p_user_id INT, IN p_expiry_days INT)

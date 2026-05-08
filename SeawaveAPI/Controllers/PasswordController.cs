@@ -19,7 +19,8 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
     [HttpGet("reset-page")]
     public IActionResult GetResetPage([FromQuery] string token)
     {
-        return Content($$"""
+        return Content(
+        $$"""
         <html>
             <head>
                 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
@@ -77,7 +78,8 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
             : "The link has expired or the token is invalid.";
         var color = success ? "#28a745" : "#dc3545";
 
-        return Content($"""
+        return Content(
+            $"""
             <html>
                 <body style='font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f9f9f9;'>
                     <div style='text-align: center; padding: 50px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px;'>

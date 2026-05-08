@@ -14,7 +14,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
         if (exists)
         {
             await emailService.SendEmailAsync(email, "Password Reset", 
-                $@"
+            $"""
             <div style='font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee;'>
                 <h2 style='color: #2D3E50;'>Password Reset Request</h2>
                 <p>We received a request to reset your password. Click the button below to choose a new one.</p>
@@ -24,8 +24,9 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
                        Reset Password
                     </a>
                 </div>
-                <p>If you didn't request this, you can ignore this email. The link will expire shortly.</p>
-            </div>");
+                <p style="font-size: 0.8em; color: #666">If you didn't request this, you can ignore this email. The link will expire shortly.</p>
+            </div>
+            """);
         }
     }
 

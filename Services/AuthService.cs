@@ -48,7 +48,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
                     <p>Please click the button below to verify your email address and activate your account.</p>
                     <div style='text-align: center; margin: 30px 0;'>
                         <a href='https://localhost:7212/api/auth/confirm-email?token={token}'
-                            style='background-color: #4CAF50; color: white; padding: 14px 25px; text-decoration: none; border-radius: 5px; display: inline-block;'>
+                            style='background-color: #007BFF; color: white; padding: 14px 25px; text-decoration: none; border-radius: 5px; display: inline-block;'>
                             Verify Email Address
                         </a>
                     </div>
