@@ -77,10 +77,10 @@ BEGIN
     SELECT LAST_INSERT_ID() AS UserId;
 END //
 
-CREATE PROCEDURE sp_GetUserById(IN p_userId INT)
+CREATE PROCEDURE sp_GetUserById(IN p_user_id INT)
 BEGIN 
     SELECT id AS Id, username AS Username, email AS Email, password_hash AS PasswordHash, is_confirmed AS IsConfirmed FROM users
-    WHERE id = p_userId;
+    WHERE id = p_user_id;
 END //
 
 CREATE PROCEDURE sp_GetUserByLogin(IN p_identifier VARCHAR(255))
@@ -142,6 +142,15 @@ BEGIN
     SELECT playlists.id AS Id, playlists.name AS Name, playlists.user_id AS CreatorId, users.username AS CreatorName
     FROM playlists JOIN users ON playlists.user_id = users.id
     WHERE playlists.id = p_playlist_id;
+END //
+
+CREATE PROCEDURE sp_GetPlaylistByUserId(IN p_user_id INT)
+BEGIN
+    SELECT playlists.id AS Id, playlists.name AS Name, playlists.user_id AS CreatorId, users.username AS CreatorName,
+    (SELECT COUNT(*) FROM playlists_tracks pt WHERE pt.playlist_id = playlists.id) AS TrackCount
+    FROM playlists
+    JOIN users ON playlists.user_id = users.id
+    WHERE playlists.user_id = p_user_id;
 END //
 
 CREATE PROCEDURE sp_GetPlaylistTracks(IN p_playlist_id INT)

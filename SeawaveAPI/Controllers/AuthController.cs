@@ -20,7 +20,7 @@ public class AuthController(AuthService authService) : ControllerBase
         var title = success ? "Email confirmed" : "Link Expired";
         var message = success ? "Your email has been confirmed. You can now log in to the desktop app." 
             : "This confirmation link is invalid or has already been used.";
-        var color = success ? "3" : "#F44336";
+        var color = success ? "#28a745" : "#F44336";
         return Content(
             $"""
             <html>

@@ -39,7 +39,7 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
                     <form id='resetForm' action='/api/password/reset-action' method='POST'>
                         <input type='hidden' name='token' value='{{token}}' />
                         <input type='password' id='newPassword' name='newPassword' placeholder='New Password' required />
-                        <input type='password' id='confirmPassword' placeholder='Confirm New Password' required />
+                        <input type='password' id='confirmPassword' name='confirmPassword' placeholder='Confirm New Password' required />
                         <div id='errorMsg' class='error'>Passwords must match and be at least 8 characters with uppercase, lowercase, and a number.</div>
                         <button type='submit' id='submitBtn'>Update Password</button>
                     </form>
@@ -49,7 +49,7 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
                     const pass = document.getElementById('newPassword');
                     const confirm = document.getElementById('confirmPassword');
                     const error = document.getElementById('errorMsg');
-                    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$/;
+                    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
             
                     form.onsubmit = function(e) {
                         if (!regex.test(pass.value) || pass.value !== confirm.value) {

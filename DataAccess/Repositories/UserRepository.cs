@@ -10,7 +10,7 @@ public class UserRepository(IDbConnectionFactory db)
     {
         using var connection = db.CreateConnection();
         return await connection.ExecuteScalarAsync<int>("sp_RegisterUser",
-            new { p_username = username, p_email = email, p_passwordHash = passwordHash },
+            new { p_username = username, p_email = email, p_password_hash = passwordHash },
             commandType: CommandType.StoredProcedure);
     }
 

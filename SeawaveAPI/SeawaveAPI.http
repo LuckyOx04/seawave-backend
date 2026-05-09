@@ -1,6 +1,125 @@
 @SeawaveAPI_HostAddress = https://localhost:7212
+@AuthToken = 302aa295-9b4d-498c-9f9d-9a408fbcced1
 
 GET {{SeawaveAPI_HostAddress}}/openapi/v1.json
 Accept: application/json
 
 ###
+
+POST {{SeawaveAPI_HostAddress}}/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "Aleks @ Stoyanov 19",
+  "email": "a.asdw.5@gmail.com",
+  "password": "12312aA@",
+  "confirmPassword": "12312aA@"
+}
+
+###
+
+POST {{SeawaveAPI_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "identifier": "a.asdw.4@gmail.com",
+  "password": "12312aA@"
+}
+
+###
+
+POST {{SeawaveAPI_HostAddress}}/api/Auth/logout
+Authorization: {{AuthToken}}
+
+###
+
+GET {{SeawaveAPI_HostAddress}}/api/Music/search/tracks?q=wa
+Accept: application/json
+
+###
+
+GET {{SeawaveAPI_HostAddress}}/api/Music/search/playlists?q=a
+Accept: application/json
+
+###
+
+GET {{SeawaveAPI_HostAddress}}/api/Music/playlist/2
+Accept: application/json
+
+###
+
+GET {{SeawaveAPI_HostAddress}}/api/Music/stream/17204_newgrounds_protos.mp3
+Accept: audio/mpeg
+
+###
+
+POST {{SeawaveAPI_HostAddress}}/api/Music/upload
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: {{AuthToken}}
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Blue brass of the beast
+--boundary
+Content-Disposition: form-data; name="artist"
+
+Newgrounds
+--boundary
+Content-Disposition: form-data; name="file"; filename="234285_Hopeku___Blue_brass_Of_the.mp3"
+Content-Type: audio/mpeg
+
+< /home/ivaylo/music/flash-games/234285_Hopeku___Blue_brass_Of_the.mp3
+--boundary--
+
+###
+
+POST {{SeawaveAPI_HostAddress}}/api/Password/forgot
+Content-Type: application/json
+
+{
+  "email": "ivailon24@gmail.com"
+}
+
+###
+
+PATCH {{SeawaveAPI_HostAddress}}/api/Password/change
+Authorization: {{AuthToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "12345bB@",
+  "newPassword": "12312aA@",
+  "confirmPassword": "12312aA@"
+}
+
+###
+
+GET {{SeawaveAPI_HostAddress}}/api/Playlist
+Authorization: {{AuthToken}}
+
+###
+
+POST {{SeawaveAPI_HostAddress}}/api/Playlist/create
+Authorization: {{AuthToken}}
+Content-Type: application/json
+
+{
+  "name": "My Playlist 2"
+}
+
+###
+
+DELETE {{SeawaveAPI_HostAddress}}/api/Playlist/delete/2
+Authorization: {{AuthToken}}
+
+###
+
+POST {{SeawaveAPI_HostAddress}}/api/Playlist/2/add-track/1
+Authorization: {{AuthToken}}
+
+###
+
+DELETE {{SeawaveAPI_HostAddress}}/api/Playlist/2/remove-track/1
+Authorization: {{AuthToken}}
+

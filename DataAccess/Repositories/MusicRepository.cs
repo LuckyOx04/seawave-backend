@@ -61,6 +61,14 @@ public class MusicRepository(IDbConnectionFactory db)
             new { p_playlist_id = playlistId },
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<PlaylistSummary>> GetPlaylistsByUserIdAsync(int userId)
+    {
+        using var connection = db.CreateConnection();
+        return await connection.QueryAsync<PlaylistSummary>("sp_GetPlaylistByUserId",
+            new { p_user_id = userId },
+            commandType: CommandType.StoredProcedure);
+    }
     
     public async Task<PlaylistDetails?> GetPlaylistDetailsAsync(int playlistId)
     {

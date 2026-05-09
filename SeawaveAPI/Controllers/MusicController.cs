@@ -31,8 +31,9 @@ public class MusicController(MusicService musicService) : ControllerBase
     }
 
     [HttpPost("upload")]
+    [Consumes("multipart/form-data")]
     [SessionAuthorize]
-    public async Task<IActionResult> UploadTrack([FromBody] TrackUploadRequest request)
+    public async Task<IActionResult> UploadTrack([FromForm] TrackUploadRequest request)
     {
         var userId = (int)HttpContext.Items["UserId"]!;
         
