@@ -48,7 +48,7 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
         return await userRepository.ResetPasswordWithTokenAsync(token, hash);
     }
 
-    public async Task<bool> ChangePasswordAsync(int userId, string currentPass, string newPass, string confirmPass)
+    public async Task ChangePasswordAsync(int userId, string currentPass, string newPass, string confirmPass)
     {
         if (!Validator.IsValidPassword(newPass))
         {
@@ -72,6 +72,6 @@ public class PasswordService(UserRepository userRepository, EmailService emailSe
         }
 
         var newHash = BC.HashPassword(newPass);
-        return await userRepository.ChangePasswordAsync(user.Id, newHash) > 0;
+        await userRepository.ChangePasswordAsync(user.Id, newHash);
     }
 }

@@ -10,11 +10,18 @@ namespace SeawaveAPI.Controllers;
 public class MusicController(MusicService musicService) : ControllerBase
 {
     [HttpGet("search/tracks")]
-    public async Task<IActionResult> SearchTracks([FromQuery] string q) => Ok(await musicService.SearchTrackAsync(q));
-    
+    public async Task<IActionResult> SearchTracks([FromQuery] string q)
+    {
+        var result = await musicService.SearchTrackAsync(q);
+        return result.Any() ? Ok(result) : NotFound();
+    }
+
     [HttpGet("search/playlists")]
-    public async Task<IActionResult> SearchPlaylists([FromQuery] string q) 
-        => Ok(await musicService.SearchPlaylistAsync(q));
+    public async Task<IActionResult> SearchPlaylists([FromQuery] string q)
+    {
+        var result = await musicService.SearchPlaylistAsync(q);
+        return result.Any() ? Ok(result) : NotFound();
+    }
 
     [HttpGet("playlist/{playlistId:int}")]
     public async Task<IActionResult> GetPlaylistDetails([FromRoute] int playlistId)
@@ -39,6 +46,6 @@ public class MusicController(MusicService musicService) : ControllerBase
         
         await using var stream = request.File.OpenReadStream();
         await musicService.RequestUploadAsync(userId, request.Title, request.Artist, request.File.FileName, stream);
-        return Ok("File uploaded for review.");
+        return Accepted();
     }
 }

@@ -13,7 +13,7 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
     public async Task<IActionResult> ForgotPassword([FromBody] ForgottenPasswordRequest request)
     {
         await passwordService.RequestPasswordResetAsync(request.Email);
-        return Ok("A reset link was sent to the email.");
+        return Ok(new { message = "A reset link was sent to the email." });
     }
 
     [HttpGet("reset-page")]
@@ -99,8 +99,8 @@ public class PasswordController(PasswordService passwordService) : ControllerBas
     {
         var userId = (int)HttpContext.Items["UserId"]!;
         
-        var success = await passwordService.ChangePasswordAsync(userId, request.CurrentPassword,
+        await passwordService.ChangePasswordAsync(userId, request.CurrentPassword,
             request.NewPassword, request.ConfirmPassword);
-        return success ? Ok() : Forbid();
+        return NoContent();
     }
 }

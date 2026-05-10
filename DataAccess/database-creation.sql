@@ -119,7 +119,6 @@ END //
 CREATE PROCEDURE sp_ChangePassword(IN p_user_id INT, IN p_new_password_hash VARCHAR(255))
 BEGIN 
     UPDATE users SET password_hash = p_new_password_hash WHERE id = p_user_id;
-    SELECT ROW_COUNT() AS Success;
 END //
 
 CREATE PROCEDURE sp_SearchTracks(IN p_query VARCHAR(255))

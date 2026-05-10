@@ -11,7 +11,7 @@ public class AuthController(AuthService authService) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegistrationRequest req) 
-        => Ok(await authService.RegisterAsync(req));
+        => Ok(new { message = await authService.RegisterAsync(req) });
 
     [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string token)
@@ -36,7 +36,7 @@ public class AuthController(AuthService authService) : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequest req) => Ok(await authService.LoginAsync(req));
+    public async Task<IActionResult> Login(LoginRequest req) => Ok(new { token = await authService.LoginAsync(req) });
 
     [HttpPost("logout")]
     [SessionAuthorize]

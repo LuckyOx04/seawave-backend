@@ -46,10 +46,10 @@ public class UserRepository(IDbConnectionFactory db)
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<int> ChangePasswordAsync(int userId, string newPasswordHash)
+    public async Task ChangePasswordAsync(int userId, string newPasswordHash)
     {
         using var connection = db.CreateConnection();
-        return await connection.ExecuteScalarAsync<int>("sp_ChangePassword",
+        await connection.ExecuteAsync("sp_ChangePassword",
             new { p_user_id = userId, p_new_password_hash = newPasswordHash },
             commandType: CommandType.StoredProcedure);
     }
