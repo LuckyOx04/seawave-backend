@@ -78,7 +78,7 @@ POST {{SeawaveAPI_HostAddress}}/api/Password/forgot
 Content-Type: application/json
 
 {
-  "email": "ivailon24@gmail.com"
+  "email": "a.asdw.4@gmail.com"
 }
 
 ###

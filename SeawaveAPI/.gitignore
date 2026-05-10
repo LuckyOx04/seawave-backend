@@ -485,3 +485,6 @@ MusicStorage/**/*
 .mp3
 .aac
 .flac
+
+#Http endpoint testing files
+*.http

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+    <title>Reset Password</title>
+    <style>
+        {CustomCSS}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Reset Password</h2>
+        <form id="resetForm" action="/api/password/reset-action" method="POST">
+            <input type="hidden" name="token" value="{token}" />
+            <input type="password" id="newPassword" name="newPassword" placeholder="New Password" required />
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password"
+                   required />
+            <div id="errorMsg" class="error">
+                Passwords must match and be at least 8 characters with uppercase, lowercase and a number.
+            </div>
+            <button type="submit" id="submitBtn">Update Password</button>
+        </form>
+    </div>
+    <script>
+        {CustomJS}
+    </script>
+</body>
+</html>
