@@ -1,23 +1,33 @@
 @SeawaveAPI_HostAddress = https://localhost:7212
 @AuthToken = 302aa295-9b4d-498c-9f9d-9a408fbcced1
 
+# Just a simple link to openapi's specification of the app. Only for testing purposes!
 GET {{SeawaveAPI_HostAddress}}/openapi/v1.json
 Accept: application/json
 
 ###
-
+# For registering a user. Username must not be empty and not contain a @ symbol.
+# Password and confirmed password must match. Password must be at least 8 characters long
+# and contain a uppercase, lowercase and a digit. Sends a confirm email to the user's email.
+# Returns either: 
+# 200 Ok { message: "Registration successful. Please, check your email." }
+# 400 { message: "When any field's format is wrong" }
+# 401 { message: "When username or email is already taken" }
 POST {{SeawaveAPI_HostAddress}}/api/Auth/register
 Content-Type: application/json
 
 {
-  "username": "Petar Georgiev 42",
+  "username": "Petar Georgiev 42", 
   "email": "p.g.64@gmail.com",
   "password": "12345aA!",
   "confirmPassword": "12345aA!"
 }
 
 ###
-
+# For user login. Can use either username or email. Account must be confirmed via the email.
+# Returns either: 
+# 200 { token: "User's session token" }
+# 401 { message "Invalid credentials or email not confirmed" }
 POST {{SeawaveAPI_HostAddress}}/api/Auth/login
 Content-Type: application/json
 
@@ -27,32 +37,50 @@ Content-Type: application/json
 }
 
 ###
-
+# Logs out the user by deleting the session from DB.
+# Returns either:
+# 204 No content
 POST {{SeawaveAPI_HostAddress}}/api/Auth/logout
 Authorization: {{AuthToken}}
 
 ###
-
+# Searches a track by its name or artist via the querry in the url.
+# Returns either:
+# 200 { list of the found tracks }
+# 404 { message: "No tracks found." }
 GET {{SeawaveAPI_HostAddress}}/api/Music/search/tracks?q=wa
 Accept: application/json
 
 ###
-
+# Searches a playlist by its name via the querry in the url
+# Returns either:
+# 200 { list of the found playlists's summary }
+# 404 { message: "No playlists found." }
 GET {{SeawaveAPI_HostAddress}}/api/Music/search/playlists?q=a
 Accept: application/json
 
 ###
-
+# Gets playlist details with the tracks list in it by the playlist's id
+# Returns either:
+# 200 { playlist's details }
+# 404 { message: "No playlist found." }
 GET {{SeawaveAPI_HostAddress}}/api/Music/playlist/2
 Accept: application/json
 
 ###
-
+# Streams the track by its file name.
+# Returns either:
+# 206 File's stream
+# 416
+# 404 { message: "File not found" }
 GET {{SeawaveAPI_HostAddress}}/api/Music/stream/17204_newgrounds_protos.mp3
 Accept: audio/mpeg
 
 ###
-
+# Uploads a track for review. Title and Artist must not be empty.
+# Returns either:
+# 202
+# 400 { when title or artist are empty or white space }
 POST {{SeawaveAPI_HostAddress}}/api/Music/upload
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: {{AuthToken}}
@@ -73,7 +101,9 @@ Content-Type: audio/mpeg
 --boundary--
 
 ###
-
+# Sends an email for forgotten password.
+# Returns:
+# 200 { message = "A reset link was sent to te email." }
 POST {{SeawaveAPI_HostAddress}}/api/Password/forgot
 Content-Type: application/json
 
@@ -82,7 +112,10 @@ Content-Type: application/json
 }
 
 ###
-
+# Resets a password of an already logged in user. New password and confirm password must be
+# the same. The new password must be at least 8 characters with an uppercase, lowercase and a digit.
+# Returns:
+# 204
 PATCH {{SeawaveAPI_HostAddress}}/api/Password/change
 Authorization: {{AuthToken}}
 Content-Type: application/json
@@ -94,12 +127,17 @@ Content-Type: application/json
 }
 
 ###
-
+# Gets all of the playlists made by the logged in user.
+# Returns:
+# 200 { list of playlist summary }
 GET {{SeawaveAPI_HostAddress}}/api/Playlist
 Authorization: {{AuthToken}}
 
 ###
-
+# Creates a new playlist for the currently logged user. The playlist name must not be empty.
+# Returns either:
+# 201 { uri: "api/Music/playlist/playlistId, { playlistId = "someId", playlistName = "name" } }
+# 400 { message: "Playlist name is required." }
 POST {{SeawaveAPI_HostAddress}}/api/Playlist/create
 Authorization: {{AuthToken}}
 Content-Type: application/json
@@ -109,17 +147,29 @@ Content-Type: application/json
 }
 
 ###
-
+# Deletes the playlists of the currently logged in user, pointed by its playlist id.
+# Returns either:
+# 204
+# 404 { message: "Playlist not found" }
 DELETE {{SeawaveAPI_HostAddress}}/api/Playlist/delete/2
 Authorization: {{AuthToken}}
 
 ###
-
+# Adds a track to the logged in user's playlist, pointed by the playlist's id and
+# the added track's id
+# Returns either:
+# 404 { message: "Playlist or track not found." }
+# 200 { playlist details, including tracks list }
 POST {{SeawaveAPI_HostAddress}}/api/Playlist/2/add-track/1
 Authorization: {{AuthToken}}
 
 ###
-
+# Removes a track from the logged in user's playlist pointed by the playlist's id
+# and the removed track's id
+# Returns either:
+# 404 { message: "Playlist or track not found." }
+# 200 { playlist details, including tracks list }
 DELETE {{SeawaveAPI_HostAddress}}/api/Playlist/2/remove-track/1
 Authorization: {{AuthToken}}
 
+# Every request can return 500 for general server exception.

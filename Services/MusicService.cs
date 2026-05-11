@@ -63,7 +63,7 @@ public class MusicService
 
     public async Task RequestUploadAsync(int userId, string title, string artist, string fileName, Stream fileStream)
     {
-        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(artist))
+        if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(artist))
         {
             throw new FormatException("Title and Artist are required for uploads.");
         }

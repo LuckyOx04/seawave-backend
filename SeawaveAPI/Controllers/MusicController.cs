@@ -13,21 +13,21 @@ public class MusicController(MusicService musicService) : ControllerBase
     public async Task<IActionResult> SearchTracks([FromQuery] string q)
     {
         var result = await musicService.SearchTrackAsync(q);
-        return result.Any() ? Ok(result) : NotFound();
+        return result.Any() ? Ok(result) : NotFound(new { message = "No tracks found." });
     }
 
     [HttpGet("search/playlists")]
     public async Task<IActionResult> SearchPlaylists([FromQuery] string q)
     {
         var result = await musicService.SearchPlaylistAsync(q);
-        return result.Any() ? Ok(result) : NotFound();
+        return result.Any() ? Ok(result) : NotFound(new { message = "No playlists found." });
     }
 
     [HttpGet("playlist/{playlistId:int}")]
     public async Task<IActionResult> GetPlaylistDetails([FromRoute] int playlistId)
     {
         var playlistDetails = await musicService.GetPlaylistDetailsAsync(playlistId);
-        return playlistDetails != null ? Ok(playlistDetails) : NotFound();
+        return playlistDetails != null ? Ok(playlistDetails) : NotFound(new { message = "No playlist found." });
     }
 
     [HttpGet("stream/{fileName}")]

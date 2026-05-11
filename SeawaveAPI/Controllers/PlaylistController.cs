@@ -31,7 +31,7 @@ public class PlaylistController(MusicService musicService) : ControllerBase
     public async Task<IActionResult> DeletePlaylist([FromRoute] int playlistId)
     {
         var success = await musicService.DeletePlaylistAsync(CurrentUserId, playlistId);
-        return success ? NoContent() : NotFound();
+        return success ? NoContent() : NotFound(new { message = "Playlist not found." });
     }
 
     [HttpPost("{playlistId:int}/add-track/{trackId:int}")]
@@ -40,7 +40,7 @@ public class PlaylistController(MusicService musicService) : ControllerBase
         var success = await musicService.AddTrackToPlaylistAsync(CurrentUserId, playlistId, trackId);
         if (!success)
         {
-            return NotFound();
+            return NotFound(new { message = "Playlist or track not found."});
         }
         
         var playlistDetails = await musicService.GetPlaylistDetailsAsync(playlistId);
@@ -53,7 +53,7 @@ public class PlaylistController(MusicService musicService) : ControllerBase
         var success = await musicService.RemoveTrackFromPlaylistAsync(CurrentUserId, playlistId, trackId);
         if (!success)
         {
-            return NotFound();
+            return NotFound(new { message = "Playlist or track not found."});
         }
      
         var playlistDetails = await musicService.GetPlaylistDetailsAsync(playlistId);
