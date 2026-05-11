@@ -1,6 +1,6 @@
 namespace Services;
 
-public class HtmlFormattingService
+public static class HtmlFormattingService
 {
     private static readonly string WebPagesFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "WebPages");
     private static readonly string EmailTemplatesFolderPath = Path.Combine(Directory.GetCurrentDirectory(), 
