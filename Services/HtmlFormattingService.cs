@@ -13,7 +13,7 @@ public class HtmlFormattingService
         var css = await File.ReadAllTextAsync(Path.Combine(WebPagesFolderPath, "StaticInfo",
             "static-info.css"));
         
-        html = html.Replace("{CustomCSS", css).Replace("{color}", color).Replace("{title}", title)
+        html = html.Replace("{CustomCSS}", css).Replace("{color}", color).Replace("{title}", title)
             .Replace("{message}", message);
         
         return html;
@@ -58,7 +58,7 @@ public class HtmlFormattingService
         var css = await File.ReadAllTextAsync(Path.Combine(WebPagesFolderPath, "FormPage", "form-page.css"));
         var js = await File.ReadAllTextAsync(Path.Combine(WebPagesFolderPath, "FormPage", "form-page.js"));
 
-        html = html.Replace("{CustomCSS}", css).Replace("{token}", token).Replace("{CustomJS", js);
+        html = html.Replace("{CustomCSS}", css).Replace("{token}", token).Replace("{CustomJS}", js);
         
         return html;
     }

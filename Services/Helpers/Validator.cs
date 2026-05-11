@@ -17,6 +17,6 @@ public static partial class Validator
     private static partial Regex AllowedEmailsRegex();
     [GeneratedRegex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$")]
     private static partial Regex AllowedPasswordsRegex();
-    [GeneratedRegex("^@")]
+    [GeneratedRegex("^[^@]*$")]
     private static partial Regex AllowedUsernamesRegex();
 }

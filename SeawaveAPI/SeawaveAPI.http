@@ -10,10 +10,10 @@ POST {{SeawaveAPI_HostAddress}}/api/Auth/register
 Content-Type: application/json
 
 {
-  "username": "Aleks @ Stoyanov 19",
-  "email": "a.asdw.5@gmail.com",
-  "password": "12312aA@",
-  "confirmPassword": "12312aA@"
+  "username": "Petar Georgiev 42",
+  "email": "p.g.64@gmail.com",
+  "password": "12345aA!",
+  "confirmPassword": "12345aA!"
 }
 
 ###
@@ -22,8 +22,8 @@ POST {{SeawaveAPI_HostAddress}}/api/Auth/login
 Content-Type: application/json
 
 {
-  "identifier": "a.asdw.4@gmail.com",
-  "password": "12312aA@"
+  "identifier": "Petar Georgiev 42",
+  "password": "12345aA!"
 }
 
 ###

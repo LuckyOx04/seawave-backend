@@ -44,7 +44,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
         var token = Guid.NewGuid().ToString();
         await userRepository.SetEmailVerificationTokenAsync(userId, token);
 
-        var emailBody = await HtmlFormattingService.GetPasswordResetEmailBody(token);
+        var emailBody = await HtmlFormattingService.GetVerifyEmailBody(token);
         await emailService.SendEmailAsync(request.Email, "Confirm your account", emailBody);
 
         return "Registration successful. Please, check your email.";
