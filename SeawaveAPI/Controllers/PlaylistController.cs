@@ -20,7 +20,7 @@ public class PlaylistController(MusicService musicService) : ControllerBase
     public async Task<IActionResult> CreatePlaylist([FromBody] CreatePlaylistRequest request)
     {
         var createdPlaylistId = await musicService.CreatePlaylistAsync(request.Name, CurrentUserId);
-        return Created(new Uri($"api/Music/playlist/{createdPlaylistId}"), new
+        return Created(new Uri($"https://localhost:7212/api/Music/playlist/{createdPlaylistId}"), new
         {
             playlistId = createdPlaylistId,
             playlistName = request.Name
