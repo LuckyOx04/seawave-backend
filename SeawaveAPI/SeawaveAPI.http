@@ -26,7 +26,7 @@ Content-Type: application/json
 ###
 # For user login. Can use either username or email. Account must be confirmed via the email.
 # Returns either: 
-# 200 { token: "User's session token" }
+# 200 { username: "User's username", email: "User's email", token: "User's session token" }
 # 401 { message "Invalid credentials or email not confirmed" }
 POST {{SeawaveAPI_HostAddress}}/api/Auth/login
 Content-Type: application/json
@@ -170,6 +170,14 @@ Authorization: {{AuthToken}}
 # 404 { message: "Playlist or track not found." }
 # 200 { playlist details, including tracks list }
 DELETE {{SeawaveAPI_HostAddress}}/api/Playlist/2/remove-track/1
+Authorization: {{AuthToken}}
+
+###
+# Get the user's profile info
+# Returns either:
+# 404 { message: "User profile info not found" }
+# 200 { user profile info object }
+GET {{SeawaveAPI_HostAddress}}//api/Auth/profile
 Authorization: {{AuthToken}}
 
 # Every request can return 500 for general server exception.

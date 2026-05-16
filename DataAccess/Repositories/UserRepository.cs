@@ -71,10 +71,10 @@ public class UserRepository(IDbConnectionFactory db)
             commandType: CommandType.StoredProcedure) == 1;
     }
 
-    public async Task<UserProfileDto?> GetUserProfileInfoAsync(int userId)
+    public async Task<UserProfileResponse?> GetUserProfileInfoAsync(int userId)
     {
         using var connection = db.CreateConnection();
-        return await connection.QueryFirstOrDefaultAsync<UserProfileDto>("sp_GetUserProfileInfo",
+        return await connection.QueryFirstOrDefaultAsync<UserProfileResponse>("sp_GetUserProfileInfo",
             new { p_user_id = userId },
             commandType: CommandType.StoredProcedure);
     }

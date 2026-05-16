@@ -52,7 +52,7 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
 
     public async Task<bool> ConfirmEmailAsync(string token) => await userRepository.ConfirmEmailAsync(token);
 
-    public async Task<string> LoginAsync(LoginRequest request)
+    public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         var identifier = Validator.IsValidUsername(request.Identifier) ?
             request.Identifier.Slugify() : request.Identifier;
@@ -70,10 +70,13 @@ public class AuthService(UserRepository userRepository, SessionRepository sessio
         var token = Guid.NewGuid().ToString();
         await sessionRepository.CreateSessionAsync(token, user.Id, 7);
 
-        return token;
+        return new LoginResponse(user.Username, user.Email, token);
     }
 
     public async Task<int?> ValidateSessionAsync(string token) => await sessionRepository.ValidateSessionAsync(token);
 
     public async Task LogoutAsync(string token) => await sessionRepository.DeleteSessionAsync(token);
+
+    public async Task<UserProfileResponse?> GetUserProfileInfoAsync(int userId) => 
+        await userRepository.GetUserProfileInfoAsync(userId);
 }

@@ -23,8 +23,17 @@ public class AuthController(AuthService authService) : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequest req) => Ok(new { token = await authService.LoginAsync(req) });
+    public async Task<IActionResult> Login(LoginRequest req) => Ok(await authService.LoginAsync(req));
 
+    [HttpGet("profile")]
+    [SessionAuthorize]
+    public async Task<IActionResult> GetUserProfile()
+    {
+        var userId = (int)HttpContext.Items["UserId"]!;
+        var result = await authService.GetUserProfileInfoAsync(userId);
+        return result != null ? Ok(result) : NotFound(new { message = "User info not found." });
+    }
+        
     [HttpPost("logout")]
     [SessionAuthorize]
     public async Task<IActionResult> Logout([FromHeader(Name = "Authorization")] string token)
