@@ -1,4 +1,5 @@
 using System.Data;
+using Core.DTOs;
 using Core.Models;
 using Dapper;
 
@@ -68,5 +69,13 @@ public class UserRepository(IDbConnectionFactory db)
         return await connection.ExecuteScalarAsync<int>("sp_ResetPasswordWithToken",
             new { p_token_hash = tokenHash, p_new_password_hash = newPasswordHash},
             commandType: CommandType.StoredProcedure) == 1;
+    }
+
+    public async Task<UserProfileDto?> GetUserProfileInfoAsync(int userId)
+    {
+        using var connection = db.CreateConnection();
+        return await connection.QueryFirstOrDefaultAsync<UserProfileDto>("sp_GetUserProfileInfo",
+            new { p_user_id = userId },
+            commandType: CommandType.StoredProcedure);
     }
 }

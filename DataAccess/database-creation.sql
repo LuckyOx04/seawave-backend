@@ -237,6 +237,16 @@ BEGIN
     END IF;
 END //
 
+CREATE PROCEDURE sp_GetUserProfileInfo(IN p_user_id INT)
+BEGIN 
+    SELECT u.username AS Username, u.email AS Email, u.created_at AS CreatedAt,
+           (SELECT COUNT(*) FROM playlists p WHERE p.user_id = u.id) AS CreatedPlaylistsCount,
+           (SELECT COUNT(*) FROM upload_queue q WHERE q.user_id = u.id AND q.status = 'pending') AS PendingTracksCount,
+           (SELECT COUNT(*) FROM upload_queue q WHERE q.user_id = u.id AND q.status = 'approved') AS ApprovedTracksCount
+    FROM users u
+    WHERE u.id = p_user_id;
+END //
+
 DELIMITER ;
 
 CREATE USER IF NOT EXISTS '{DATABASE_USER}'@'localhost' IDENTIFIED BY '{DATABASE_PASSWORD}';
