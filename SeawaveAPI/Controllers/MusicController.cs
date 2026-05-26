@@ -16,6 +16,12 @@ public class MusicController(MusicService musicService) : ControllerBase
         return result.Any() ? Ok(result) : NotFound(new { message = "No tracks found." });
     }
 
+    [HttpHead("search/tracks")]
+    public IActionResult Ping([FromQuery] string q)
+    {
+        return Ok();
+    }
+
     [HttpGet("search/playlists")]
     public async Task<IActionResult> SearchPlaylists([FromQuery] string q)
     {
