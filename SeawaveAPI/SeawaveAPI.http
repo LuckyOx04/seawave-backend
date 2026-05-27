@@ -1,5 +1,5 @@
 @SeawaveAPI_HostAddress = https://localhost:7212
-@AuthToken = 302aa295-9b4d-498c-9f9d-9a408fbcced1
+@AuthToken = 32779e20-5068-406f-b355-5087d99ce17b
 
 # Just a simple link to openapi's specification of the app. Only for testing purposes!
 GET {{SeawaveAPI_HostAddress}}/openapi/v1.json
