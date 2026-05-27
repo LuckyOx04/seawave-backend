@@ -48,7 +48,7 @@ Authorization: {{AuthToken}}
 # Returns either:
 # 200 { list of the found tracks }
 # 404 { message: "No tracks found." }
-GET {{SeawaveAPI_HostAddress}}/api/Music/search/tracks?q=wa
+GET {{SeawaveAPI_HostAddress}}/api/Music/search/tracks?q=u
 Accept: application/json
 
 ###
