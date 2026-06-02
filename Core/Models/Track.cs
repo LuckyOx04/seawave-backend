@@ -6,5 +6,5 @@ public class Track
     public string Title { get; set; } = string.Empty;
     public string Artist { get; set; } = string.Empty;
     public string FileName { get; set; } = string.Empty;
-    public int DurationSeconds { get; set; }
+    public double DurationSeconds { get; set; }
 }

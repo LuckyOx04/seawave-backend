@@ -15,7 +15,7 @@ CREATE TABLE tracks (
     title VARCHAR(255) NOT NULL,
     artist VARCHAR(255) NOT NULL,
     file_name VARCHAR(255) NOT NULL,
-    duration_seconds INT NOT NULL,
+    duration_seconds DOUBLE NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
