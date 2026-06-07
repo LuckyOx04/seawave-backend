@@ -174,7 +174,7 @@ END //
 CREATE PROCEDURE sp_AddTrackToPlaylist(IN p_user_id INT, IN p_playlist_id INT, IN p_track_id INT)
 BEGIN 
     DECLARE v_playlist_id INT;
-    SELECT id INTO v_playlist_id FROM playlists WHERE user_id = p_user_id;
+    SELECT id INTO v_playlist_id FROM playlists WHERE user_id = p_user_id AND id = p_playlist_id;
     IF v_playlist_id IS NOT NULL THEN
         INSERT IGNORE INTO playlists_tracks (playlist_id, track_id) VALUES (p_playlist_id, p_track_id);
         SELECT 1 AS Success;

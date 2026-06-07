@@ -1,5 +1,5 @@
 @SeawaveAPI_HostAddress = https://localhost:7212
-@AuthToken = 32779e20-5068-406f-b355-5087d99ce17b
+@AuthToken = b02ccb22-83f1-4423-8b6a-c36b9316c91e
 
 # Just a simple link to openapi's specification of the app. Only for testing purposes!
 GET {{SeawaveAPI_HostAddress}}/openapi/v1.json
@@ -160,7 +160,7 @@ Authorization: {{AuthToken}}
 # Returns either:
 # 404 { message: "Playlist or track not found." }
 # 200 { playlist details, including tracks list }
-POST {{SeawaveAPI_HostAddress}}/api/Playlist/2/add-track/1
+POST {{SeawaveAPI_HostAddress}}/api/Playlist/6/add-track/3
 Authorization: {{AuthToken}}
 
 ###
