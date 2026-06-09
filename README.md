@@ -39,6 +39,7 @@ In the root folder, where SeawaveAPI.slnx sits create a folder called "certs" an
 ### Prerequisites
 - MariaDB Server
 
+### Installation & Run
 1. Download the **seawave-api.tar.gz** file
 
 2. Extract the file
@@ -62,6 +63,7 @@ dotnet SeawaveAPI.dll
 - Docker
 - Docker Compose
 
+### Installation & Run
 1. Download the **seawave-api-docker-compose.tar.gz** file
 
 2. Extract the file
