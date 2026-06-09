@@ -9,7 +9,7 @@ This is a web API that acts as a backend for a music streaming platform. It regi
 - BCrypt
 - MailKit
 
-##How to Run Locally (For Developers)
+## How to Run Locally (For Developers)
 
 ### Prerequisites
 - .NET 10 SDK or Later
