@@ -18,23 +18,23 @@ This is a web API that acts as a backend for a music streaming platform. It regi
 ### Installation & Run
 1. Clone the repository:
 ```bash
-git clone [https://github.com/yourusername/your-repo.git](https://github.com/yourusername/your-repo.git)
+git clone https://github.com/LuckyOx04/seawave-backend.git
 ```
-2. Open appsettings.Development.json and place the values for your case. Do the same with appsettings.json.
+2. Open **appsettings.Development.json** and place the values for your case. Do the same with **appsettings.json**.
 
-3. Navigate to the project directory where SeawaveAPI.slnx file is located and restore dependencies:
+3. Navigate to the project directory where **SeawaveAPI.slnx** file is located and restore dependencies:
 ```bash
 dotnet restore
 ```
-4. Run the application with https or http profile
+4. Run the application with **https** or **http** profile
 ```bash
 dotnet run --project SeawaveAPI --launch-profile [http;https]
 ```
 
 ### For HTTPS use
-In the root folder, where SeawaveAPI.slnx sits create a folder called "certs" and place your certificate and server private key there. Name them dev-cert.crt and dev-cert.key respectively.
+In the root folder, where **SeawaveAPI.slnx** sits create a folder called **"certs"** and place your certificate and server private key there. Name them **dev-cert.crt** and **dev-cert.key** respectively.
 
-## How to Run Locally (For Normal Users)
+## How to Run Locally (For Non Developers)
 
 ### Prerequisites
 - MariaDB Server
@@ -86,4 +86,4 @@ mv .env.template .env
 ```bash
 docker compose up -d
 ```
-8. Now, your container should be up and running on *port 8080* for HTTP or *port 8081* for HTTPS
+8. Now, your container should be up and running on ***port 8080*** for HTTP or ***port 8081*** for HTTPS
