@@ -26,8 +26,8 @@
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "https://+:8081;http://+:8080;"
       ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Url: "https://+:8081"
-      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__Path: "${SEAWAVE_SERVER_CERTIFICATE}"
-      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__KeyPath: "${SEAWAVE_SERVER_PRIVATE_KEY}"
+      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__Path: "/custom-certs/${SEAWAVE_SERVER_CERTIFICATE_FILE}"
+      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__KeyPath: "/custom-certs/${SEAWAVE_SERVER_PRIVATE_KEY_FILE}"
       ConnectionStrings__DefaultConnection: "Server=seawave-db;Port=3307;Database=seawave;Uid=${MARIADB_API_USER};Pwd=${MARIADB_API_PASSWORD};AllowZeroDateTime=True;TreatTinyAsBoolean=True;DateTimeKind=Utc;"
     volumes:
       - ./certs:/custom-certs:ro
