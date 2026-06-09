@@ -7,7 +7,12 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
 COPY ["SeawaveAPI/SeawaveAPI.csproj", "SeawaveAPI/"]
+COPY ["Core/Core.csproj", "Core/"]
+COPY ["Services/Services.csproj", "Services/"]
+COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
+
 RUN dotnet restore "SeawaveAPI/SeawaveAPI.csproj"
 COPY . .
 WORKDIR "/src/SeawaveAPI"
