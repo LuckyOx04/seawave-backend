@@ -23,11 +23,12 @@
       - "8080:8080"
       - "8081:8081"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+
-      - ASPNETCORE_Kestrel__Certificates__Default__Certificate__Path=${SEAWAVE_SERVER_CERTIFICATE}
-      - ASPNETCORE_Kestrel__Certificates__Default__Certificate__KeyPath=${SEAWAVE_SERVER_PRIVATE_KEY}
-      - ConnectionStrings__DefaultConnection=Server=seawave-db;Database=seawave;Uid=${MARIADB_API_USER};Pwd=${MARIADB_API_PASSWORD};AllowZeroDateTime=True;TreatTinyAsBoolean=True;DateTimeKind=Utc;
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "https://+:8081;http://+:8080;"
+      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Url: "https://+:8081"
+      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__Path: "${SEAWAVE_SERVER_CERTIFICATE}"
+      ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__KeyPath: "${SEAWAVE_SERVER_PRIVATE_KEY}"
+      ConnectionStrings__DefaultConnection: "Server=seawave-db;Port=3307;Database=seawave;Uid=${MARIADB_API_USER};Pwd=${MARIADB_API_PASSWORD};AllowZeroDateTime=True;TreatTinyAsBoolean=True;DateTimeKind=Utc;"
     volumes:
       - ./certs:/custom-certs:ro
     depends_on:
