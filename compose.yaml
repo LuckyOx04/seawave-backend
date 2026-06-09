@@ -1,16 +1,37 @@
 ﻿services:
+  seawave-db:
+    image: mariadb:11.4
+    container_name: seawave-mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MYSQL_DATABASE: seawave
+      MYSQL_USER: ${MARIADB_API_USER}
+      MYSQL_PASSWORD: ${MARIADB_API_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+      - seawave-db-data:/var/lib/mysql
+
   seawave-api:
     image: seawave-api
     build:
       context: .
       dockerfile: SeawaveAPI/Dockerfile
     ports:
-      - "8080:80"
-      - "8081:443"
+      - "8080:8080"
+      - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Certificate__Path=${SEAWAVE_SERVER_CERTIFICATE}
+      - ASPNETCORE_Kestrel__Certificates__Default__Certificate__KeyPath=${SEAWAVE_SERVER_PRIVATE_KEY}
+      - ConnectionStrings__DefaultConnection=Server=seawave-db;Database=seawave;Uid=${MARIADB_API_USER};Pwd=${MARIADB_API_PASSWORD};AllowZeroDateTime=True;TreatTinyAsBoolean=True;DateTimeKind=Utc;
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ./certs:/custom-certs:ro
+    depends_on:
+      - seawave-db
+
+volumes:
+  seawave-db-data:
