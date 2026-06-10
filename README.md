@@ -28,11 +28,11 @@ dotnet restore
 ```
 4. Run the application with **https** or **http** profile
 ```bash
-dotnet run --project SeawaveAPI --launch-profile [http;https]
+dotnet run --project SeawaveAPI --launch-profile [http|https]
 ```
 
 ### For HTTPS use
-In the root folder, where **SeawaveAPI.slnx** sits create a folder called **"certs"** and place your certificate and server private key there. Name them **dev-cert.crt** and **dev-cert.key** respectively.
+In the root folder, where **SeawaveAPI.slnx** sits create, a folder called **"certs"** and place your certificate and server private key there. Name them **dev-cert.crt** and **dev-cert.key** respectively.
 
 ## How to Run Locally (For Non Developers)
 
