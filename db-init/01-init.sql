@@ -112,6 +112,7 @@ BEGIN
         DELETE FROM password_reset_tokens WHERE user_id = v_user_id;
         SELECT 1 AS Success;
     ELSE
+        DELETE FROM password_reset_tokens WHERE token_hash = p_token_hash;
         SELECT 0 AS Success;
     END IF;
 END //
@@ -233,6 +234,7 @@ BEGIN
         DELETE FROM email_verification_tokens WHERE user_id = v_user_id;
         SELECT 1 AS Success;
     ELSE
+        DELETE FROM email_verification_tokens WHERE token_hash = p_token_hash;
         SELECT 0 AS Success;
     END IF;
 END //
