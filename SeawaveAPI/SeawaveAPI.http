@@ -1,4 +1,4 @@
-@SeawaveAPI_HostAddress = https://localhost:7212
+@SeawaveAPI_HostAddress = https://localhost:8081
 @AuthToken = b02ccb22-83f1-4423-8b6a-c36b9316c91e
 
 # Just a simple link to openapi's specification of the app. Only for testing purposes!
@@ -179,5 +179,13 @@ Authorization: {{AuthToken}}
 # 200 { user profile info object }
 GET {{SeawaveAPI_HostAddress}}//api/Auth/profile
 Authorization: {{AuthToken}}
+
+###
+# Used for pinging the server for connection.
+# Head method ensures no body is returned fora a faster response
+#Returns either:
+# 200 when a connection i made
+# Nothing otherwise
+HEAD {{SeawaveAPI_HostAddress}}//api/Music/search/tracks?q=test
 
 # Every request can return 500 for general server exception.

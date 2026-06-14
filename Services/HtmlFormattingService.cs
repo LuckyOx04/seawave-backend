@@ -2,9 +2,9 @@ namespace Services;
 
 public static class HtmlFormattingService
 {
-    private static readonly string WebPagesFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "WebPages");
-    private static readonly string EmailTemplatesFolderPath = Path.Combine(Directory.GetCurrentDirectory(), 
-        "EmailTemplates");
+    private static readonly string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+    private static readonly string WebPagesFolderPath = Path.Combine(BaseDirectory, "WebPages");
+    private static readonly string EmailTemplatesFolderPath = Path.Combine(BaseDirectory, "EmailTemplates");
 
     private static async Task<string> GetFormattedStaticInfoHtml(string title, string message, string color)
     {

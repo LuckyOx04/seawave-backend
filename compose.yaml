@@ -4,10 +4,10 @@
     container_name: seawave-mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-      MYSQL_DATABASE: seawave
-      MYSQL_USER: ${MARIADB_API_USER}
-      MYSQL_PASSWORD: ${MARIADB_API_PASSWORD}
+      MYSQL_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "seawave"
+      MYSQL_USER: "seawave_db_api_user"
+      MYSQL_PASSWORD: "${MARIADB_API_PASSWORD}"
     ports:
       - "3307:3306"
     volumes:
@@ -18,7 +18,7 @@
     image: seawave-api
     build:
       context: .
-      dockerfile: SeawaveAPI/Dockerfile
+      dockerfile: "SeawaveAPI/Dockerfile"
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -28,9 +28,11 @@
       ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Url: "https://+:8081"
       ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__Path: "/custom-certs/${SEAWAVE_SERVER_CERTIFICATE_FILE}"
       ASPNETCORE_Kestrel__Endpoints__HttpsEndpoint__Certificate__KeyPath: "/custom-certs/${SEAWAVE_SERVER_PRIVATE_KEY_FILE}"
-      ConnectionStrings__DefaultConnection: "Server=seawave-db;Port=3307;Database=seawave;Uid=${MARIADB_API_USER};Pwd=${MARIADB_API_PASSWORD};AllowZeroDateTime=True;TreatTinyAsBoolean=True;DateTimeKind=Utc;"
+      ConnectionStrings__DefaultConnection: "Server=seawave-db;Port=3307;Database=seawave;Uid=seawave_db_api_user;Pwd=${MARIADB_API_PASSWORD};AllowZeroDateTime=True;TreatTinyAsBoolean=True;DateTimeKind=Utc;"
     volumes:
       - ./certs:/custom-certs:ro
+      - ./music-data/library:/app/MusicStorage/Library
+      - ./music-data/pending:/app/MusicStorage/Pending
     depends_on:
       - seawave-db
 
