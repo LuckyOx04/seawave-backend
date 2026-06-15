@@ -22,13 +22,11 @@ git clone https://github.com/LuckyOx04/seawave-backend.git
 ```
 2. Open **appsettings.Development.json** and place the values for your case. Do the same with **appsettings.json**.
 
-3. There is a sql script file **db-init.sql**, which can be used to created the needed database structure in MariaDB. In that file, at the end, you have to specify a username and password for your user, trough which the Web API will access the database.
-
-4. Navigate to the project directory where **SeawaveAPI.slnx** file is located and restore dependencies:
+3. Navigate to the project directory where **SeawaveAPI.slnx** file is located and restore dependencies:
 ```bash
 dotnet restore
 ```
-5. Run the application with **https** or **http** profile
+4. Run the application with **https** or **http** profile
 ```bash
 dotnet run --project SeawaveAPI --launch-profile [http|https]
 ```
@@ -54,7 +52,9 @@ cd seawave-api
 ```
 4. Confugure **appsettings.json** to fit your needs with a text editor of your choice
 
-5. Run the program
+5. There is a sql script file **db-init.sql**, which can be used to created the needed database structure in MariaDB. In that file, at the end, you have to specify a username and password for your user, trough which the Web API will access the database.
+
+6. Run the program
 ```bash
 dotnet SeawaveAPI.dll
 ```
